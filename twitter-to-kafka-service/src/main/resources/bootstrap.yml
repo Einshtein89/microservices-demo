@@ -1,3 +1,6 @@
+#bootstrap.yml is required to set properties that will run before application.yml
+#here we set app name for service discovery, active profile for getting config files from git using spring cloud
+#config server, config name, that is composed like {prefix-active_profile} creds and uri to get config
 spring:
   application:
     name: twitter-to-kafka-service

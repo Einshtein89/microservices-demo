@@ -12,7 +12,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
   {
     web.ignoring()
         .antMatchers("/encrypt/**")
-        .antMatchers("/decrypt/**");
+        .antMatchers("/decrypt/**")
+        .antMatchers("/actuator/**");
     super.configure(web);
   }
 }

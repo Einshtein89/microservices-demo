@@ -1,3 +1,5 @@
+#bootstrap.yml is required to set properties that will run before application.yml
+#here we set app name for service discovery, git server and creds to retrieve config files and creds to server itself.
 spring:
   application:
     name: configserver
