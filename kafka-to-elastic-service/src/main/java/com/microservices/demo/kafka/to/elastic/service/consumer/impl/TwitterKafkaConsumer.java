@@ -36,6 +36,14 @@ public class TwitterKafkaConsumer implements KafkaConsumer<Long, TwitterAvroMode
         this.kafkaConfigData = configData;
     }
 
+    @EventListener(ApplicationStartedEvent.class)
+    public void onAppStarted(ApplicationStartedEvent event)
+    {
+        kafkaAdminClient.createTopics();
+        LOG.info("Topics with name {} is ready for operations!", kafkaConfigData.getTopicNamesToCreate().toArray());
+        kafkaListenerEndpointRegistry.getListenerContainer("twitterTopicListener").start();
+    }
+
     @Override
     @KafkaListener(id = "twitterTopicListener", topics = "${kafka-config.topic-name}")
     public void receive(@Payload List<TwitterAvroModel> messages,
