@@ -7,13 +7,13 @@ spring:
     config:
       server:
         git:
-          uri: file://Users/makhnonosov/Work/Microservices/microservices-demo/config-server-repository
           clone-on-start: true
           default-label: main
           # Settings for remote git, for local we can use local path to cloned git repo.
-          #          uri: https://github.com/Einshtein89/spring-cloud-config-server-reposirtory
-          #          username: Einshtein89
-          #          password: '{cipher}aa1da1f25266a40a0b3ad3e350b6473c3d8ceae3ba7ee0226f456db7dcfc7e8df60da7f9b9669350d3972c936dce654c6fc097824195f61be2cc9bf9d7a86a30'
+          #uri: file://Users/makhnonosov/Work/Microservices/microservices-demo/config-server-repository
+          uri: https://github.com/Einshtein89/spring-cloud-config-server-reposirtory
+          username: Einshtein89
+          password: '{cipher}aa1da1f25266a40a0b3ad3e350b6473c3d8ceae3ba7ee0226f456db7dcfc7e8df60da7f9b9669350d3972c936dce654c6fc097824195f61be2cc9bf9d7a86a30'
       fail-fast: true
   security:
     user:
