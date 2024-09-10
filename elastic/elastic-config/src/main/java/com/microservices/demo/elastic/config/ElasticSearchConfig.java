@@ -10,14 +10,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.microservices.demo.config.ElasticConfigData;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "com.microservices.demo.elastic.index.client.repository")
+@EnableElasticsearchRepositories(basePackages = "com.microservices.demo.elastic")
 public class ElasticSearchConfig extends AbstractElasticsearchConfiguration
 {
   private final ElasticConfigData elasticConfigData;

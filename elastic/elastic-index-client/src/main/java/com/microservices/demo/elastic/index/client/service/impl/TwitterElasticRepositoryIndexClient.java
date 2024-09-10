@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.microservices.demo.elastic.index.client.repository.TwitterElasticSearchIndexRepository;
@@ -30,7 +29,9 @@ public class TwitterElasticRepositoryIndexClient implements ElasticIndexClient<T
   {
     LOG.info("Using Repository Client implementation");
     final var twitterIndexModels = (List<TwitterIndexModel>) twitterElasticSearchIndexRepository.saveAll(documents);
-    final var ids = twitterIndexModels.stream().map(TwitterIndexModel::getId).collect(Collectors.toList());
+    final var ids = twitterIndexModels.stream()
+        .map(TwitterIndexModel::getId)
+        .collect(Collectors.toList());
     LOG.info("Documents indexed successfully with type: {} and ids: {}", TwitterIndexModel.class.getName(),
         ids);
 
