@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElasticQueryServiceResponseModel extends RepresentationModel<ElasticQueryServiceResponseModel>
+public class ElasticQueryServiceResponseModelV2 extends RepresentationModel<ElasticQueryServiceResponseModelV2>
 {
-   private String id;
+  private Long id;
   private Long userId;
   private String text;
   private LocalDateTime createdAt;
