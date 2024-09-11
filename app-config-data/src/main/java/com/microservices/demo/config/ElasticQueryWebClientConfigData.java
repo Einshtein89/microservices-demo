@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class ElasticQueryWebClientConfigData
 {
   private WebClient webClient;
-  private Query queryByText;
+  private Query query;
 
   @Data
   public static class WebClient
