@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         .inMemoryAuthentication()
         .withUser(userConfigData.getUsername())
         .password(passwordEncoder().encode(userConfigData.getPassword()))
-        .roles(userConfigData.getRole());
+        .roles(userConfigData.getRoles());
   }
 
   @Bean
