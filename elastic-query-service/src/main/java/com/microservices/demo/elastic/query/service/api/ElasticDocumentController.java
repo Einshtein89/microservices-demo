@@ -7,6 +7,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,8 @@ public class ElasticDocumentController
   private static final Logger LOG = LoggerFactory.getLogger(ElasticDocumentController.class);
 
   private final ElasticQueryService elasticQueryService;
+  @Value("${server.port}")
+  private String port;
 
   public ElasticDocumentController(ElasticQueryService elasticQueryService)
   {
@@ -107,7 +110,7 @@ public class ElasticDocumentController
       @RequestBody @Valid ElasticQueryServiceRequestModel requestModel)
   {
     List<ElasticQueryServiceResponseModel> response = elasticQueryService.getDocumentByText(requestModel.getText());
-    LOG.info("ElasticSearch returned {} documents.", response.size());
+    LOG.info("ElasticSearch returned {} documents in port {}.", response.size(), port);
 
     return ResponseEntity.ok(response);
   }

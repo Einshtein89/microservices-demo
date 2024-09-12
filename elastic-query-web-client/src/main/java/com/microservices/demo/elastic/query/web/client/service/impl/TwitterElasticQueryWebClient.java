@@ -1,11 +1,11 @@
 package com.microservices.demo.elastic.query.web.client.service.impl;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -52,10 +52,10 @@ public class TwitterElasticQueryWebClient implements ElasticQueryWebClient
   private WebClient.ResponseSpec getWebClient(ElasticQueryWebClientRequestModel requestModel)
   {
     return webClientBuilder.build()
-        .method(HttpMethod.valueOf(elasticQueryWebClientConfigData.getQuery().getMethod()))
-        .uri(elasticQueryWebClientConfigData.getQuery().getUri())
-        .accept(MediaType.valueOf(elasticQueryWebClientConfigData.getQuery().getAccept()))
-        .body(BodyInserters.fromPublisher(Mono.just(requestModel), createParametrizedTypereference()))
+        .method(HttpMethod.valueOf(elasticQueryWebClientConfigData.getQueryByText().getMethod()))
+        .uri(elasticQueryWebClientConfigData.getQueryByText().getUri())
+        .accept(MediaType.valueOf(elasticQueryWebClientConfigData.getQueryByText().getAccept()))
+        .body(BodyInserters.fromPublisher(Mono.just(requestModel), createParametrizedTypeReference()))
         .retrieve()
         .onStatus(
             httpStatus -> httpStatus.equals(HttpStatus.UNAUTHORIZED),
@@ -69,9 +69,9 @@ public class TwitterElasticQueryWebClient implements ElasticQueryWebClient
 
   }
 
-  private <T> ParameterizedTypeReference<T> createParametrizedTypereference()
+  private <T> ParameterizedTypeReference<T> createParametrizedTypeReference()
   {
-    return new ParameterizedTypeReference()
+    return new ParameterizedTypeReference<>()
     {
     };
   }
