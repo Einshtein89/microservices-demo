@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.microservices.demo.elastic.model.index.impl.TwitterIndexModel;
 import com.microservices.demo.elastic.query.service.api.ElasticDocumentController;
-import com.microservices.demo.elastic.query.service.model.ElasticQueryServiceResponseModel;
-import com.microservices.demo.elastic.query.service.transformer.ElasticToResponseModelTransformer;
+import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceResponseModel;
+import com.microservices.demo.elastic.query.service.common.transformer.ElasticToResponseModelTransformer;
 
 @Component
 public class ElasticQueryServiceResponseModelAssembler
