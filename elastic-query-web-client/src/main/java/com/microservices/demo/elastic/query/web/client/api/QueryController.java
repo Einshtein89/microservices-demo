@@ -51,7 +51,7 @@ public class QueryController {
         LOG.info("Querying with text {}", requestModel.getText());
         ElasticQueryWebClientAnalyticsResponseModel responseModel
             = elasticQueryWebClient.queryByText(requestModel);
-        model.addAttribute("elasticQueryWebClientResponseModels", responseModel.getQueryResponseModels());
+        model.addAttribute("elasticQueryWebClientResponseModels", responseModel.getElasticQueryServiceResponseModels());
         model.addAttribute("wordCount", responseModel.getWordCount());
         model.addAttribute("searchText", requestModel.getText());
         model.addAttribute("elasticQueryWebClientRequestModel",

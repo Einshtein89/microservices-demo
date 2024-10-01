@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ElasticQueryWebClientAnalyticsResponseModel
 {
-  private List<ElasticQueryWebClientResponseModel> queryResponseModels;
+  private List<ElasticQueryWebClientResponseModel> elasticQueryServiceResponseModels;
   private Long wordCount;
 }
