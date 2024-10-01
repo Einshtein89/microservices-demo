@@ -18,6 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.microservices.demo.config.ElasticQueryWebClientConfigData;
 import com.microservices.demo.elastic.query.web.client.service.ElasticQueryWebClient;
 import com.microservices.demo.web.client.common.exception.ElasticQueryWebClientException;
+import com.microservices.demo.web.client.common.model.ElasticQueryWebClientAnalyticsResponseModel;
 import com.microservices.demo.web.client.common.model.ElasticQueryWebClientRequestModel;
 import com.microservices.demo.web.client.common.model.ElasticQueryWebClientResponseModel;
 
@@ -40,12 +41,11 @@ public class TwitterElasticQueryWebClient implements ElasticQueryWebClient
   }
 
   @Override
-  public List<ElasticQueryWebClientResponseModel> queryByText(ElasticQueryWebClientRequestModel requestModel)
+  public ElasticQueryWebClientAnalyticsResponseModel queryByText(ElasticQueryWebClientRequestModel requestModel)
   {
     LOG.info("Querying by text {}", requestModel.getText());
     return getWebClient(requestModel)
-        .bodyToFlux(ElasticQueryWebClientResponseModel.class)
-        .collectList()
+        .bodyToMono(ElasticQueryWebClientAnalyticsResponseModel.class)
         .block();
   }
 
