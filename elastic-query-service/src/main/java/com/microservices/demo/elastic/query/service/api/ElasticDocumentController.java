@@ -126,7 +126,7 @@ public class ElasticDocumentController {
             elasticQueryService.getDocumentByText(elasticQueryServiceRequestModel.getText(),
                 oAuth2AuthorizedClient.getAccessToken().getTokenValue());
         LOG.info("Elasticsearch returned {} of documents on port {}",
-            response.getQueryResponseModels().size(), port);
+            response.getElasticQueryServiceResponseModels().size(), port);
         return ResponseEntity.ok(response);
     }
 

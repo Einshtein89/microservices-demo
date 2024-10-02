@@ -59,7 +59,7 @@ public class TwitterElasticQueryService implements ElasticQueryService {
     List<ElasticQueryServiceResponseModel> elasticQueryServiceResponseModels =
         elasticQueryServiceResponseModelAssembler.toModels(elasticQueryClient.getIndexModelByText(text));
     return ElasticQueryServiceAnalyticsResponseModel.builder()
-        .queryResponseModels(elasticQueryServiceResponseModels)
+        .elasticQueryServiceResponseModels(elasticQueryServiceResponseModels)
         .wordCount(getWordCount(text, accessToken))
         .build();
   }

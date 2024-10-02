@@ -42,7 +42,7 @@ public class QueryServicePermissionEvaluator implements PermissionEvaluator {
             ElasticQueryServiceAnalyticsResponseModel responseBody =
                     ((ResponseEntity<ElasticQueryServiceAnalyticsResponseModel>) targetDomain).getBody();
             Objects.requireNonNull(responseBody);
-            return postAuthorize(authentication, responseBody.getQueryResponseModels(), permission);
+            return postAuthorize(authentication, responseBody.getElasticQueryServiceResponseModels(), permission);
         }
         return false;
     }
