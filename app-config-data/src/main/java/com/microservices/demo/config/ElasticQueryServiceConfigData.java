@@ -1,9 +1,8 @@
 package com.microservices.demo.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import lombok.Data;
 
 @Data
 @Configuration
@@ -14,6 +13,7 @@ public class ElasticQueryServiceConfigData {
   private Long backPressureDelayMs;
   private WebClient webClient;
   private Query queryFromKafkaStateStore;
+  private Query queryFromAnalyticsDatabase;
 
   @Data
   public static class WebClient {
@@ -33,4 +33,3 @@ public class ElasticQueryServiceConfigData {
     private String uri;
   }
 }
-
