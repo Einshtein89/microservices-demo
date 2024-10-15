@@ -11,7 +11,7 @@ spring:
           clone-on-start: true
           username: Einshtein89
           password: '{cipher}aa1da1f25266a40a0b3ad3e350b6473c3d8ceae3ba7ee0226f456db7dcfc7e8df60da7f9b9669350d3972c936dce654c6fc097824195f61be2cc9bf9d7a86a30'
-          default-label: main
+          default-label: gateway-service
       fail-fast: true
   security:
     user:
