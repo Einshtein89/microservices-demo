@@ -1,11 +1,11 @@
 spring:
   application:
-    name: elastic-query-service
+    name: gateway-service
   profiles:
-    active: elastic_query
+    active: gateway
   cloud:
     config:
-      name: elastic-query-service,config-client
+      name: gateway-service,config-client
       uri: http://localhost:8888
       username: spring_cloud_user
       password: '{cipher}0dbba6b61e4e061ca3ee152c47ed93aac50292169027f1f5b8ef13ad188162ddd50a1f43fbc1ab1339d312b11deb4f21'
@@ -13,7 +13,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://discovery-service-1:8761/eureka/,http://discovery-service-2:8762/eureka/
+      defaultZone: http://localhost:8761/eureka/
   # only needed for gateway-service implementation
   instance:
     lease-expiration-duration-in-seconds: 5
