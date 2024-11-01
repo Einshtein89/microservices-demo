@@ -58,6 +58,9 @@
         <elastic.version>7.9.1</elastic.version>
         <springdoc-openapi-ui.version>1.5.0</springdoc-openapi-ui.version>
         <postgresql.version>42.2.16</postgresql.version>
+        <micrometer-registry-prometheus.version>1.5.2</micrometer-registry-prometheus.version>
+
+        <logstash-logback-encoder.version>6.5</logstash-logback-encoder.version>
     </properties>
 
     <repositories>
@@ -316,6 +319,12 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-registry-prometheus</artifactId>
+                <version>${micrometer-registry-prometheus.version}</version>
             </dependency>
 
         </dependencies>
