@@ -1,9 +1,13 @@
 package com.microservices.demo.elastic.query.web.client.service.impl;
 
+import static com.microservices.demo.mdc.Constants.CORRELATION_ID_HEADER;
+import static com.microservices.demo.mdc.Constants.CORRELATION_ID_KEY;
+
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.ParameterizedTypeReference;
@@ -55,6 +59,7 @@ public class TwitterElasticQueryWebClient implements ElasticQueryWebClient
         .method(HttpMethod.valueOf(elasticQueryWebClientConfigData.getQueryByText().getMethod()))
         .uri(elasticQueryWebClientConfigData.getQueryByText().getUri())
         .accept(MediaType.valueOf(elasticQueryWebClientConfigData.getQueryByText().getAccept()))
+        .header(CORRELATION_ID_HEADER, MDC.get(CORRELATION_ID_KEY))
         .body(BodyInserters.fromPublisher(Mono.just(requestModel), createParametrizedTypeReference()))
         .retrieve()
         .onStatus(

@@ -12,6 +12,7 @@
     <artifactId>analytics-service</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.microservices.demo</groupId>
             <artifactId>app-config-data</artifactId>
