@@ -11,6 +11,7 @@ import com.microservices.demo.elastic.query.service.common.model.ElasticQuerySer
 @Component
 public class ElasticToResponseModelTransformer
 {
+
   public ElasticQueryServiceResponseModel toModel(TwitterIndexModel twitterIndexModel)
   {
     return ElasticQueryServiceResponseModel
@@ -24,8 +25,6 @@ public class ElasticToResponseModelTransformer
 
   public List<ElasticQueryServiceResponseModel> toModels(List<TwitterIndexModel> twitterIndexModels)
   {
-    return twitterIndexModels.stream()
-        .map(this::toModel)
-        .collect(Collectors.toList());
+    return twitterIndexModels.stream().map(this::toModel).collect(Collectors.toList());
   }
 }
