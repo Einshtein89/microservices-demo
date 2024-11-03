@@ -66,11 +66,11 @@ public class TwitterElasticQueryWebClient implements ElasticQueryWebClient
             httpStatus -> httpStatus.equals(HttpStatus.UNAUTHORIZED),
             clientResponse -> Mono.just(new BadCredentialsException("Not authenticated!")))
         .onStatus(
-            HttpStatus::is4xxClientError,
-            cr -> Mono.just(new ElasticQueryWebClientException(cr.statusCode().getReasonPhrase())))
+            s -> s.equals(HttpStatus.BAD_REQUEST),
+            cr -> Mono.just(new ElasticQueryWebClientException(cr.statusCode().toString())))
         .onStatus(
-            HttpStatus::is5xxServerError,
-            cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())));
+            s -> s.equals(HttpStatus.INTERNAL_SERVER_ERROR),
+            cr -> Mono.just(new Exception(cr.statusCode().toString())));
 
   }
 

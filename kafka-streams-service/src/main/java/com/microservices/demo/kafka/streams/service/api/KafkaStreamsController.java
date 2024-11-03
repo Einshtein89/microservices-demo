@@ -1,6 +1,6 @@
 package com.microservices.demo.kafka.streams.service.api;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

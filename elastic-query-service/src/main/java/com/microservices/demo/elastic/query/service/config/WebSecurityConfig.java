@@ -1,66 +1,78 @@
 package com.microservices.demo.elastic.query.service.config;
 
+import com.microservices.demo.elastic.query.service.security.QueryServicePermissionEvaluator;
 import com.microservices.demo.elastic.query.service.security.TwitterQueryUserDetailsService;
 import com.microservices.demo.elastic.query.service.security.TwitterQueryUserJwtConverter;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import java.util.Arrays;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter
-{
+@EnableMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfig {
 
   private final TwitterQueryUserDetailsService twitterQueryUserDetailsService;
 
   private final OAuth2ResourceServerProperties oAuth2ResourceServerProperties;
 
-  public WebSecurityConfig(
-      TwitterQueryUserDetailsService userDetailsService,
-      OAuth2ResourceServerProperties resourceServerProperties)
-  {
+  private final QueryServicePermissionEvaluator queryServicePermissionEvaluator;
+
+  public WebSecurityConfig(TwitterQueryUserDetailsService userDetailsService,
+      OAuth2ResourceServerProperties resourceServerProperties,
+      QueryServicePermissionEvaluator queryServicePermissionEvaluator) {
     this.twitterQueryUserDetailsService = userDetailsService;
     this.oAuth2ResourceServerProperties = resourceServerProperties;
+    this.queryServicePermissionEvaluator = queryServicePermissionEvaluator;
   }
 
   @Value("${security.paths-to-ignore}")
   private String[] pathsToIgnore;
 
-  @Override
-  public void configure(HttpSecurity http) throws Exception
-  {
-    http
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .csrf()
-        .disable()
-        .authorizeRequests()
-        .anyRequest()
-        .fullyAuthenticated()
-        .and()
-        .oauth2ResourceServer()
-        .jwt()
-        .jwtAuthenticationConverter(twitterQueryUserJwtConverter());
+
+  @Bean
+  public MethodSecurityExpressionHandler expressionHandler() {
+    DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
+    expressionHandler.setPermissionEvaluator(queryServicePermissionEvaluator);
+    return expressionHandler;
   }
 
   @Bean
-  JwtDecoder jwtDecoder(
-      @Qualifier("elastic-query-service-audience-validator")
-      OAuth2TokenValidator<Jwt> audienceValidator)
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .authorizeHttpRequests(requests -> requests
+            .requestMatchers(Arrays.stream(pathsToIgnore).map(AntPathRequestMatcher::new).toList().toArray(new RequestMatcher[]{}))
+            .permitAll()
+            .anyRequest().authenticated())
+        .sessionManagement((session) -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .csrf(AbstractHttpConfigurer::disable)
+        .oauth2ResourceServer((oauth2) -> oauth2
+            .jwt(jwt -> jwt
+                .jwtAuthenticationConverter(twitterQueryUserJwtConverter())));
+    return http.build();
+  }
+
+  @Bean
+  JwtDecoder jwtDecoder(@Qualifier("elastic-query-service-audience-validator")
+  OAuth2TokenValidator<Jwt> audienceValidator)
   {
     NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(
         oAuth2ResourceServerProperties.getJwt().getIssuerUri());
@@ -71,15 +83,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
     jwtDecoder.setJwtValidator(withAudience);
     return jwtDecoder;
-  }
-
-
-  @Override
-  public void configure(WebSecurity webSecurity) throws Exception
-  {
-    webSecurity
-        .ignoring()
-        .antMatchers(pathsToIgnore);
   }
 
   @Bean

@@ -1,53 +1,29 @@
 package com.microservices.demo.elastic.config;
 
-import java.util.Objects;
-
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import com.microservices.demo.config.ElasticConfigData;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.client.ClientConfiguration;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "com.microservices.demo.elastic")
-public class ElasticSearchConfig extends AbstractElasticsearchConfiguration
-{
+public class ElasticSearchConfig extends ElasticsearchConfiguration {
+
   private final ElasticConfigData elasticConfigData;
 
-  public ElasticSearchConfig(ElasticConfigData elasticConfigData)
-  {
-    this.elasticConfigData = elasticConfigData;
+  public ElasticSearchConfig(ElasticConfigData configData) {
+    this.elasticConfigData = configData;
   }
 
   @Override
-  @Bean
-  public RestHighLevelClient elasticsearchClient()
-  {
-    final var serverUri = UriComponentsBuilder.fromHttpUrl(elasticConfigData.getConnectionUrl()).build();
-
-    return new RestHighLevelClient(
-        RestClient.builder(
-                new HttpHost(Objects.requireNonNull(serverUri.getHost()), serverUri.getPort(), serverUri.getScheme())
-            )
-            .setRequestConfigCallback(requestConfigBuilder ->
-                requestConfigBuilder
-                    .setConnectTimeout(elasticConfigData.getConnectionTimeout())
-                    .setSocketTimeout(elasticConfigData.getSocketTimeout())
-            )
-    );
+  public ClientConfiguration clientConfiguration() {
+    return ClientConfiguration.builder()
+        .connectedTo(elasticConfigData.getConnectionUrl())
+        .withConnectTimeout(elasticConfigData.getConnectionTimeout())
+        .withSocketTimeout(elasticConfigData.getSocketTimeout())
+        .build();
   }
 
-  @Bean
-  public ElasticsearchOperations elasticsearchTemplate()
-  {
-    return new ElasticsearchRestTemplate(elasticsearchClient());
-  }
 
 }
